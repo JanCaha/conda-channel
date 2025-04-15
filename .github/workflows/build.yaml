@@ -53,21 +53,10 @@ jobs:
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          use-mamba: false
-          auto-update-conda: true
+          use-mamba: true
           python-version: ${{ matrix.python-version }}
           environment-file: conda-env.yaml
           activate-environment: dev-viewshed
-
-      - name: Set solver
-        run: |
-          conda config --set solver classic
-          conda install conda-build conda-index
-          echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
-      
-      - name: Install dependencies
-        run: |
-          conda install libgcc-ng libstdcxx-ng libcxx    
 
       - name: Clone and build viewshed
         run: |
