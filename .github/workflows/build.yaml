@@ -55,13 +55,10 @@ jobs:
         with:
           use-mamba: true
           python-version: ${{ matrix.python-version }}
-          environment-file: conda-env.yaml
-          activate-environment: dev-viewshed
       
       - name: Install conda-build
         run: |
           conda install -n base conda-build
-          conda activate dev-viewshed
     
       - name: Clone and build viewshed
         run: |
@@ -72,7 +69,7 @@ jobs:
       - name: Copy to directory
         run: |
           mkdir -p linux-64
-          cp $CONDA_PREFIX/conda-bld/linux-64/*.conda linux-64
+          cp $CONDA/conda-bld/linux-64/*.conda linux-64
 
       - name: List packages
         run: |
