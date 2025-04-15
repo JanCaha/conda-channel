@@ -53,6 +53,7 @@ jobs:
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
+          use-mamba: false
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           environment-file: conda-env.yaml
@@ -72,7 +73,7 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
-          conda-build conda
+          conda build conda/meta.yaml
           ls -l $CONDA_PREFIX/conda-bld/linux-64
           cp $CONDA_PREFIX/conda-bld/linux-64/*.conda ./packages
 
