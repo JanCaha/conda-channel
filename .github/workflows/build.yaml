@@ -66,6 +66,7 @@ jobs:
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
           conda build conda
+          conda install --use-local libsimplerasters
           cd ..
           rm -rf cpp-simplerasters
       
@@ -74,6 +75,7 @@ jobs:
           gh repo clone JanCaha/cpp-viewshed-library
           cd cpp-viewshed-library
           conda build conda
+          conda install --use-local mypackage
           cd ..
           rm -rf cpp-viewshed-library
 
