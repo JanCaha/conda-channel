@@ -54,6 +54,10 @@ jobs:
           environment-file: conda-env.yaml
           python-version: ${{ matrix.python-version }}
           pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
+      
+      - name: Set solver
+        run: |
+          conda config --set solver classic   
 
       - name: Clone and build viewshed
         run: |
