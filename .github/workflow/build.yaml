@@ -60,3 +60,8 @@ jobs:
           cd cpp-simplerasters
           conda-build conda
           ls -l $CONDA_PREFIX/conda-bld/linux-64
+          cp $CONDA_PREFIX/conda-bld/linux-64/*.conda ./packages
+
+      - name: packages
+        run: |
+          ls -l ./packages
