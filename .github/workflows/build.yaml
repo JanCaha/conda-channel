@@ -61,6 +61,7 @@ jobs:
       - name: Install conda-build
         run: |
           conda install -n base conda-build
+          conda activate dev-viewshed
     
       - name: Clone and build viewshed
         run: |
