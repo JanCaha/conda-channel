@@ -73,7 +73,7 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
-          conda build conda/meta.yaml
+          conda build conda
           ls -l $CONDA_PREFIX/conda-bld/linux-64
           cp $CONDA_PREFIX/conda-bld/linux-64/*.conda ./packages
 
