@@ -1,0 +1,16 @@
+name: dev-viewshed
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - conda-build
+  - cmake
+  - ninja
+  - pip
+  - scikit-build-core
+  - setuptools
+  - pybind11
+  - pybind11-stubgen
+  - libgdal
