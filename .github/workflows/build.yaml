@@ -58,6 +58,9 @@ jobs:
       - name: Init conda
         run: |
           conda init bash
+      
+      - name: Create conda env
+        run: |    
           conda env create -f conda-env.yaml
           conda activate dev-viewshed  
 
