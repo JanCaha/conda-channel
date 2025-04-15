@@ -48,16 +48,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          activate-environment: dev-viewshed
-          environment-file: conda-env.yaml
-          python-version: ${{ matrix.python-version }}
-          pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
+      # - uses: conda-incubator/setup-miniconda@v3
+      #   with:
+      #     activate-environment: dev-viewshed
+      #     environment-file: conda-env.yaml
+      #     python-version: ${{ matrix.python-version }}
+      #     pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
       
-      - name: Set solver
+      - name: Init conda
         run: |
-          conda config --set solver classic
+          $CONDA init bash
+          conda env create -f conda-env.yaml
+          conda activate dev-viewshed  
+
+      # - name: Set solver
+      #   run: |
+      #     conda config --set solver classic
       
       - name: Install dependencies
         run: |
