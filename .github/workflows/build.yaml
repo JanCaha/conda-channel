@@ -61,7 +61,7 @@ jobs:
         run: |
           conda install -n base conda-build
     
-      - name: Clone and build viewshed
+      - name: Clone and build simplerasters
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
