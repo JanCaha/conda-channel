@@ -57,7 +57,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: conda-env.yaml
           activate-environment: dev-viewshed
-
+      
+      - name: Install conda-build
+        run: |
+          conda install -n base conda-build
+    
       - name: Clone and build viewshed
         run: |
           gh repo clone JanCaha/cpp-simplerasters
