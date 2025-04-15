@@ -23,6 +23,7 @@ jobs:
 
     env:
       CONDA_PKG_DIR: ~/conda_pkgs_dir
+      GH_TOKEN: ${{ github.token }}
 
     steps:
       - name: Set Env
