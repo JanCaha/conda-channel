@@ -1,0 +1,62 @@
+name: Build packages
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+on: push
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    permissions:
+      contents: write
+
+    env:
+      CONDA_PKG_DIR: ~/conda_pkgs_dir
+
+    steps:
+      - name: Set Env
+        run: |
+          echo "APT_CACHE_DIR=$RUNNER_TEMP/apt_cache" >> $GITHUB_ENV
+          echo "MONTH=$(date +%B)" >> $GITHUB_ENV
+
+      - name: ATP download settings
+        run: |
+          mkdir -p $APT_CACHE_DIR/partial
+          echo Dir::Cache::Archives $APT_CACHE_DIR";" | sudo tee /etc/apt/apt.conf.d/50cacheDir
+          echo 'APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/10keep-cache
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Conda
+        uses: actions/cache@v4
+        env:
+          CACHE_NUMBER: 0
+        with:
+          path: ${{ env.CONDA_PKG_DIR }}
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('conda-environment.yml') }}-${{ env.MONTH }}
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: dev-viewshed
+          environment-file: conda-environment.yml
+          python-version: ${{ matrix.python-version }}
+          pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
+
+      - name: Clone and build viewshed
+        run: |
+          gh repo clone JanCaha/cpp-simplerasters
+          cd cpp-simplerasters
+          conda-build conda
+          ls -l $CONDA_PREFIX/conda-bld/linux-64
