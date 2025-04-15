@@ -63,9 +63,23 @@ jobs:
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
           conda build conda
-          ls -l $CONDA_PREFIX/conda-bld/linux-64
-          cp $CONDA_PREFIX/conda-bld/linux-64/*.conda ./packages
 
-      - name: packages
+      - name: Copy to directory
         run: |
-          ls -l ./packages
+          mkdir -p linux-64
+          cp $CONDA_PREFIX/conda-bld/linux-64/*.conda linux-64
+
+      - name: List packages
+        run: |
+          ls -l linux-64   
+
+      - name: Conda index
+        run: |
+          conda index .
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+            commit_message: New package versions
+            file_pattern: '*.json *.json.bz2 *.conda'
+            branch: gh-pages
+   
