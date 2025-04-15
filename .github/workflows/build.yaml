@@ -104,6 +104,6 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: New package versions
-            file_pattern: '*.json *.json.bz2 *.conda'
+            file_pattern: 'linux-64/*'
             branch: gh-pages
    
