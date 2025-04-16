@@ -7,7 +7,11 @@ concurrency:
 on: push
 
 jobs:
-  build-and-deploy:
+
+  Build-and-Deploy-Linux:
+
+    name: Build and deploy Linux packages
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -83,7 +87,7 @@ jobs:
           conda install --use-local viewshed
           cd ..
           rm -rf viewshed-library-pybind11
-          
+
       - name: Copy to directory
         run: |
           mkdir -p linux-64
