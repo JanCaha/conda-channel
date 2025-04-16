@@ -102,6 +102,69 @@ jobs:
           name: linux-64
           path: linux-64/
 
+  
+  Build-and-Deploy-Windows:
+
+    name: Build and deploy Windows packages
+    
+    runs-on: windows-latest
+    
+    steps:
+      
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+        
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          use-mamba: true
+          channels: conda-forge
+        
+      - name: Install conda-build
+        run: |
+          conda install -n base conda-build
+    
+      - name: Clone and build libsimplerasters
+        run: |
+          gh repo clone JanCaha/cpp-simplerasters
+          cd cpp-simplerasters
+          conda build conda
+          conda install --use-local libsimplerasters
+          cd ..
+          rmdir /s /q cpp-simplerasters
+      
+      - name: Clone and build libviewshed
+        run: |
+          gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
+          cd cpp-viewshed-library
+          conda build conda
+          conda install --use-local libviewshed
+          cd ..
+          rmdir /s /q cpp-viewshed-library
+      
+      - name: Clone and build viewshed
+        run: |
+          gh repo clone JanCaha/viewshed-library-pybind11
+          cd viewshed-library-pybind11
+          conda build conda
+          conda install --use-local viewshed
+          cd ..
+          rmdir /s /q viewshed-library-pybind11
+    
+      - name: Copy to directory
+        run: |
+          mkdir win-64
+          copy %CONDA_PREFIX%\conda-bld\win-64\*.conda win-64
+
+      - name: List packages
+        run: |
+          dir win-64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: win-64
+          path: win-64/    
+
   Build-Conda-Channel-Push-to-GithubPages:
 
     name: Build Conda Channel and push to GitHub Pages
