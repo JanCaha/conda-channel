@@ -121,6 +121,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: linux-64
+          path: linux-64.zip
       
       - name: Extract artifact
         run: |
