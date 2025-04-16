@@ -106,4 +106,8 @@ jobs:
             commit_message: New package versions
             file_pattern: 'linux-64/*'
             branch: gh-pages
-   
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-64
+          path: linux-64      
