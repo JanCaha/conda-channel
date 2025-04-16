@@ -86,7 +86,11 @@ jobs:
           conda install --use-local viewshed
           cd ..
           rm -rf viewshed-library-pybind11
-
+      
+      - name: Git checkout gh-pages
+        run: |
+          git checkout gh-pages    
+          
       - name: Copy to directory
         run: |
           mkdir -p linux-64
