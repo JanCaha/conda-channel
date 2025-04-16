@@ -121,13 +121,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: linux-64
-          path: linux-64.zip
+          path: linux-64
       
       - name: Extract artifact
         run: |
           echo $(pwd)
+          cd linux-64
           ls -l
-          unzip linux-64.zip -d linux-64
 
       - name: Conda index
         run: |
