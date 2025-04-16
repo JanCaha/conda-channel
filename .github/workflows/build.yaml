@@ -123,6 +123,10 @@ jobs:
           name: linux-64
           path: linux-64.zip
       
+      - name: Print directory
+        run: |
+          ls -l
+
       - name: Extract artifact
         run: |
           unzip linux-64.zip -d linux-64
