@@ -48,14 +48,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      #     pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
-      
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
           use-mamba: true
           python-version: ${{ matrix.python-version }}
           channels: conda-forge
+          pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
       
       - name: Install conda-build
         run: |
