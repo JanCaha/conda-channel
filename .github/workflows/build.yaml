@@ -140,7 +140,9 @@ jobs:
       - name: Clone and build libsimplerasters
         run: |
           gh repo clone JanCaha/cpp-simplerasters
+          dir /a
           cd cpp-simplerasters
+          dir /a
           cd ..
           dir /a
           rmdir /s /q cpp-simplerasters
