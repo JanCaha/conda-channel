@@ -120,10 +120,6 @@ jobs:
       
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
-
-      - uses: actions/checkout@v4
-        with:
-          ref: gh-pages
         
       - uses: conda-incubator/setup-miniconda@v3
         with:
@@ -139,10 +135,14 @@ jobs:
     
       - name: Clone and build libsimplerasters
         run: |
+          Get-Location
+          echo ***
+          dir /a
+          echo ----
           gh repo clone JanCaha/cpp-simplerasters
           dir /a
           echo ----
-          cd cpp-simplerasters
+          Set-Location cpp-simplerasters
           dir /a
           echo ----
           cd ..
@@ -166,7 +166,11 @@ jobs:
       #     conda install --use-local viewshed
       #     cd ..
       #     rmdir viewshed-library-pybind11 /s /q
-    
+      
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
       - name: Copy to directory
         run: |
           mkdir win-64
