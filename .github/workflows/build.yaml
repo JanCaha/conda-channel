@@ -131,7 +131,10 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
-          conda build conda
+          conda-build conda
+      
+      - name: Install libsimplerasters
+        run: |    
           conda install --use-local libsimplerasters
           cd ..
           rmdir /s /q cpp-simplerasters
