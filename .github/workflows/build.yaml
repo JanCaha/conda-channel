@@ -173,7 +173,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: win-64
-          path: win-64/    
+          path: win-64/
 
   Build-Conda-Channel-Push-to-GithubPages:
 
