@@ -112,6 +112,10 @@ jobs:
     
     runs-on: windows-latest
     
+    defaults:
+      run:
+        shell: cmd
+
     env:
       GH_TOKEN: ${{ github.token }}
       LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
@@ -121,47 +125,28 @@ jobs:
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
         
-      # - uses: conda-incubator/setup-miniconda@v3
-      #   with:
-      #     auto-update-conda: true
-      #     use-mamba: true
-      #     channels: conda-forge,defaults
-      #     auto-activate-base: true
-      #     activate-environment: ""
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          use-mamba: true
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          activate-environment: ""
       
-      # - name: Install conda-build
-      #   run: |
-      #     conda install -n base conda-build conda-verify
-      - name: Clone and process another repository
-        shell: cmd
+      - name: Install conda-build
         run: |
-          echo Cloning the repository...
-          gh repo clone JanCaha/cpp-simplerasters
-          echo Navigating into the repository...
-          cd cpp-simplerasters
-          echo Listing files in the repository:
-          dir
-          echo Moving back to the parent directory...
-          cd ..
-          echo Removing the cloned repository...
-          rmdir /s /q cpp-simplerasters
+          conda install -n base conda-build conda-verify
 
       - name: Clone and build libsimplerasters
+        shell: cmd
         run: |
-          Get-Location
-          echo ***
-          dir /a
-          echo ----
           gh repo clone JanCaha/cpp-simplerasters
-          dir /a
-          echo ----
-          Set-Location cpp-simplerasters
-          dir /a
-          echo ----
+          cd cpp-simplerasters
+          echo Listing files in the repository:
+          conda build conda
           cd ..
-          dir /a
           rmdir /s /q cpp-simplerasters
-      
+
       # - name: Clone and build libviewshed
       #   run: |
       #     gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
