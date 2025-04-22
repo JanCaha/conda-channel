@@ -122,7 +122,10 @@ jobs:
         with:
           use-mamba: true
           channels: conda-forge
-        
+      
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
       - name: Install conda-build
         run: |
           conda install -n base conda-build
