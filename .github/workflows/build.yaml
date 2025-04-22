@@ -111,6 +111,7 @@ jobs:
     
     env:
       GH_TOKEN: ${{ github.token }}
+      LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
 
     steps:
       
