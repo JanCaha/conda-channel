@@ -142,8 +142,8 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
-          echo Listing files in the repository:
           conda build conda
+          conda install --use-local libsimplerasters
           cd ..
           rmdir /s /q cpp-simplerasters
 
@@ -172,7 +172,7 @@ jobs:
       - name: Copy to directory
         run: |
           mkdir win-64
-          copy %CONDA_PREFIX%\conda-bld\win-64\*.conda win-64
+          copy %CONDA%\conda-bld\win-64\*.conda win-64
 
       - name: List packages
         run: |
