@@ -141,8 +141,10 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           dir /a
+          echo ----
           cd cpp-simplerasters
           dir /a
+          echo ----
           cd ..
           dir /a
           rmdir /s /q cpp-simplerasters
