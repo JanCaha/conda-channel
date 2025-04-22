@@ -53,13 +53,16 @@ jobs:
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
+          auto-update-conda: true
           use-mamba: true
-          channels: conda-forge
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          activate-environment: ""
           pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
       
       - name: Install conda-build
         run: |
-          conda install -n base conda-build
+          conda install -n base conda-build conda-verify
     
       - name: Clone and build libsimplerasters
         run: |
@@ -115,30 +118,30 @@ jobs:
 
     steps:
       
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
       - uses: actions/checkout@v4
         with:
           ref: gh-pages
         
       - uses: conda-incubator/setup-miniconda@v3
         with:
+          auto-update-conda: true
           use-mamba: true
-          channels: conda-forge
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          activate-environment: ""
       
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-
       - name: Install conda-build
         run: |
-          conda install -n base conda-build
+          conda install -n base conda-build conda-verify
     
       - name: Clone and build libsimplerasters
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
           conda build conda
-      
-      - name: Install libsimplerasters
-        run: |    
           conda install --use-local libsimplerasters
           cd ..
           rmdir /s /q cpp-simplerasters
@@ -195,8 +198,11 @@ jobs:
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
+          auto-update-conda: true
           use-mamba: true
-          channels: conda-forge
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          activate-environment: ""
 
       - name: Install conda-build
         run: |
