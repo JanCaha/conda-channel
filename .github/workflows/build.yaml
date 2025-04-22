@@ -144,7 +144,8 @@ jobs:
           conda build conda
           conda install --use-local libsimplerasters
           cd ..
-          rmdir cpp-simplerasters /s /q
+          dir /a
+          rmdir /s /q cpp-simplerasters
       
       # - name: Clone and build libviewshed
       #   run: |
