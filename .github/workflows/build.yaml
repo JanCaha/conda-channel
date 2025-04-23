@@ -45,11 +45,6 @@ jobs:
           path: ${{ env.CONDA_PKG_DIR }}
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('conda-env.yaml') }}-${{ env.MONTH }}
       
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
