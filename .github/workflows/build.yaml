@@ -149,7 +149,7 @@ jobs:
       #     conda build conda
       #     conda install --use-local libviewshed
       #     cd ..
-      #     rmdir cpp-viewshed-library /s /q 
+      #     rmdir /s /q cpp-viewshed-library
       
       # - name: Clone and build viewshed
       #   run: |
@@ -158,12 +158,8 @@ jobs:
       #     conda build conda
       #     conda install --use-local viewshed
       #     cd ..
-      #     rmdir viewshed-library-pybind11 /s /q
+      #     rmdir /s /q viewshed-library-pybind11
       
-      - uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
       - name: Copy to directory
         run: |
           mkdir win-64
