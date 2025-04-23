@@ -68,23 +68,23 @@ jobs:
           cd ..
           rm -rf cpp-simplerasters
       
-      # - name: Clone and build libviewshed
-      #   run: |
-      #     gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
-      #     cd cpp-viewshed-library
-      #     conda build conda
-      #     conda install --use-local libviewshed
-      #     cd ..
-      #     rm -rf cpp-viewshed-library
+      - name: Clone and build libviewshed
+        run: |
+          gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
+          cd cpp-viewshed-library
+          conda build conda
+          conda install --use-local libviewshed
+          cd ..
+          rm -rf cpp-viewshed-library
       
-      # - name: Clone and build viewshed
-      #   run: |
-      #     gh repo clone JanCaha/viewshed-library-pybind11
-      #     cd viewshed-library-pybind11
-      #     conda build conda
-      #     conda install --use-local viewshed
-      #     cd ..
-      #     rm -rf viewshed-library-pybind11
+      - name: Clone and build viewshed
+        run: |
+          gh repo clone JanCaha/viewshed-library-pybind11
+          cd viewshed-library-pybind11
+          conda build conda
+          conda install --use-local viewshed
+          cd ..
+          rm -rf viewshed-library-pybind11
 
       - name: Copy to directory
         run: |
