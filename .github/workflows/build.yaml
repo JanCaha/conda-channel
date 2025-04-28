@@ -37,7 +37,7 @@ jobs:
       
       - name: Install conda-build
         run: |
-          conda install -n base conda-build conda-verify conda-index
+          conda install -n base conda-build conda-verify conda-index sqlite
     
       - name: Clone and build libsimplerasters
         run: |
