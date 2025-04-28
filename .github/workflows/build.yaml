@@ -195,11 +195,11 @@ jobs:
           name: linux-64
           path: linux-64
 
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: win-64
-          path: win-64
+      # - name: Download Windows artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: win-64
+      #     path: win-64
 
       - name: Conda index
         run: |
