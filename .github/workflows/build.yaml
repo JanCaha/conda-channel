@@ -81,46 +81,46 @@ jobs:
           path: linux-64/
 
   
-  # Build-and-Deploy-Windows:
+  Build-and-Deploy-Windows:
 
-  #   name: Build and deploy Windows packages
+    name: Build and deploy Windows packages
     
-  #   runs-on: windows-latest
+    runs-on: windows-latest
     
-  #   defaults:
-  #     run:
-  #       shell: cmd
+    defaults:
+      run:
+        shell: cmd
 
-  #   env:
-  #     GH_TOKEN: ${{ github.token }}
-  #     LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
 
-  #   steps:
+    steps:
       
   #     - name: Setup MSVC
   #       uses: ilammy/msvc-dev-cmd@v1
         
-  #     - uses: conda-incubator/setup-miniconda@v3
-  #       with:
-  #         auto-update-conda: true
-  #         use-mamba: true
-  #         channels: conda-forge,defaults
-  #         auto-activate-base: true
-  #         activate-environment: ""
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          use-mamba: true
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          activate-environment: ""
       
-  #     - name: Install conda-build
-  #       run: |
-  #         conda install -n base conda-build conda-verify
+      - name: Install conda-build
+        run: |
+          conda install -n base conda-build conda-verify
 
-  #     - name: Clone and build libsimplerasters
-  #       shell: cmd
-  #       run: |
-  #         gh repo clone JanCaha/cpp-simplerasters
-  #         cd cpp-simplerasters
-  #         conda build conda
-  #         conda install --use-local libsimplerasters
-  #         cd ..
-  #         rmdir /s /q cpp-simplerasters
+      - name: Clone and build libsimplerasters
+        shell: cmd
+        run: |
+          gh repo clone JanCaha/cpp-simplerasters
+          cd cpp-simplerasters
+          conda build conda --variant-config-files conda/variants/windows.yaml
+          conda install --use-local libsimplerasters
+          cd ..
+          rmdir /s /q cpp-simplerasters
 
   #     - name: Clone and build libviewshed
   #       run: |
@@ -140,19 +140,19 @@ jobs:
   #         cd ..
   #         rmdir /s /q viewshed-library-pybind11
       
-  #     - name: Copy to directory
-  #       run: |
-  #         mkdir win-64
-  #         copy %CONDA%\conda-bld\win-64\*.conda win-64
+      - name: Copy to directory
+        run: |
+          mkdir win-64
+          copy %CONDA%\conda-bld\win-64\*.conda win-64
 
-  #     - name: List packages
-  #       run: |
-  #         dir win-64
+      - name: List packages
+        run: |
+          dir win-64
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: win-64
-  #         path: win-64/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: win-64
+          path: win-64/
 
   Build-Conda-Channel-Push-to-GithubPages:
 
