@@ -129,7 +129,7 @@ jobs:
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
           cd cpp-viewshed-library
           conda build conda
-          conda install --use-local libviewshed
+          conda install --use-local libviewshed --variant-config-files conda/variants/windows.yaml
           cd ..
           rmdir /s /q cpp-viewshed-library
       
