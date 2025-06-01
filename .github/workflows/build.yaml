@@ -59,14 +59,14 @@ jobs:
           cd ..
           rm -rf cpp-viewshed-library
       
-      # - name: Clone and build viewshed
-      #   run: |
-      #     gh repo clone JanCaha/viewshed-library-pybind11
-      #     cd viewshed-library-pybind11
-      #     conda build conda
-      #     conda install --use-local viewshed
-      #     cd ..
-      #     rm -rf viewshed-library-pybind11
+      - name: Clone and build viewshed
+        run: |
+          gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
+          cd viewshed-library-pybind11
+          conda build conda
+          conda install --use-local viewshed
+          cd ..
+          rm -rf viewshed-library-pybind11
 
       - name: Copy to directory
         run: |
@@ -131,15 +131,15 @@ jobs:
           cd ..
           rmdir /s /q cpp-viewshed-library
       
-  #     - name: Clone and build viewshed
-  #       shell: cmd
-  #       run: |
-  #         gh repo clone JanCaha/viewshed-library-pybind11
-  #         cd viewshed-library-pybind11
-  #         conda build conda
-  #         conda install --use-local viewshed
-  #         cd ..
-  #         rmdir /s /q viewshed-library-pybind11
+      - name: Clone and build viewshed
+        shell: cmd
+        run: |
+          gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
+          cd viewshed-library-pybind11
+          conda build conda --variant-config-files conda/variants/windows.yaml
+          conda install --use-local viewshed
+          cd ..
+          rmdir /s /q viewshed-library-pybind11
       
       - name: Copy to directory
         run: |
