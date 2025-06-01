@@ -63,7 +63,7 @@ jobs:
         run: |
           gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
           cd viewshed-library-pybind11
-          conda build conda --variant-config-files conda/variants/linux.yaml
+          conda build conda
           conda install --use-local viewshed
           cd ..
           rm -rf viewshed-library-pybind11
