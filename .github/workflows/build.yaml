@@ -8,6 +8,9 @@ on:
   - push
   - workflow_dispatch
 
+env:
+  python-version: 3.12
+
 jobs:
 
   Build-and-Deploy-Linux:
@@ -39,7 +42,7 @@ jobs:
       
       - name: Install conda-build
         run: |
-          conda install -n base conda-build conda-verify conda-index sqlite
+          conda install -n base conda-build conda-verify conda-index sqlite python={{ env.python-version }}
 
       - name: Clone and build libsimplerasters
         run: |
@@ -109,7 +112,7 @@ jobs:
       
       - name: Install conda-build
         run: |
-          conda install -n base conda-build conda-verify
+          conda install -n base conda-build conda-verify python={{ env.python-version }}
 
       - name: Clone and build libsimplerasters
         shell: cmd
