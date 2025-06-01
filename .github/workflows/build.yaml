@@ -37,9 +37,8 @@ jobs:
           use-mamba: true
           channels: conda-forge,defaults
           auto-activate-base: true
-          activate-environment: ""
-          pkgs-dirs: ${{ env.CONDA_PKG_DIR }}
           python-version: ${{ env.python-version }}
+          activate-environment: true
       
       - name: Install conda-build
         run: |
@@ -109,8 +108,8 @@ jobs:
           use-mamba: true
           channels: conda-forge,defaults
           auto-activate-base: true
-          activate-environment: ""
           python-version: ${{ env.python-version }}
+          activate-environment: true
       
       - name: Install conda-build
         run: |
