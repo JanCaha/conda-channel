@@ -216,20 +216,17 @@ jobs:
 
       - name: Copy to directory
         run: |
-          mkdir -p osx-64
-          cp $CONDA/conda-bld/osx-64/*.conda osx-64 || true
           mkdir -p osx-arm64
-          cp $CONDA/conda-bld/osx-arm64/*.conda osx-arm64 || true
+          cp $CONDA/conda-bld/osx-arm64/*.conda osx-arm64
 
       - name: List packages
         run: |
-          ls -l osx-64 || true
-          ls -l osx-arm64 || true
+          ls -l osx-arm64 
 
       - uses: actions/upload-artifact@v4
         with:
-          name: osx-64
-          path: osx-64/
+          name: osx-arm64
+          path: osx-arm64/
 
   Build-Conda-Channel-Push-to-GithubPages:
 
@@ -281,8 +278,8 @@ jobs:
       - name: Download MacOS artifact
         uses: actions/download-artifact@v4
         with:
-          name: osx-64
-          path: osx-64
+          name: osx-arm64
+          path: osx-arm64
 
       - name: Conda index
         run: |
