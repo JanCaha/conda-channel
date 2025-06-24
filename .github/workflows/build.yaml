@@ -158,6 +158,78 @@ jobs:
         with:
           name: win-64
           path: win-64/
+  
+  Build-and-Deploy-macOS:
+
+    name: Build and deploy macOS packages
+
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Setup conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          use-mamba: true
+          channels: conda-forge,defaults
+          auto-activate-base: true
+          python-version: ${{ env.python-version }}
+          activate-environment: true
+
+      - name: Install conda-build
+        run: |
+          conda install -n base conda-build conda-verify conda-index sqlite
+
+      - name: Clone and build libsimplerasters
+        run: |
+          gh repo clone JanCaha/cpp-simplerasters
+          cd cpp-simplerasters
+          conda build conda
+          conda install --use-local libsimplerasters
+          cd ..
+          rm -rf cpp-simplerasters
+
+      # - name: Clone and build libviewshed
+      #   run: |
+      #     gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
+      #     cd cpp-viewshed-library
+      #     conda build conda
+      #     conda install --use-local libviewshed
+      #     cd ..
+      #     rm -rf cpp-viewshed-library
+
+      # - name: Clone and build viewshed
+      #   run: |
+      #     gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
+      #     cd viewshed-library-pybind11
+      #     conda build conda
+      #     conda install --use-local viewshed
+      #     cd ..
+      #     rm -rf viewshed-library-pybind11
+
+      - name: Copy to directory
+        run: |
+          mkdir -p osx-64
+          cp $CONDA/conda-bld/osx-64/*.conda osx-64 || true
+          mkdir -p osx-arm64
+          cp $CONDA/conda-bld/osx-arm64/*.conda osx-arm64 || true
+
+      - name: List packages
+        run: |
+          ls -l osx-64 || true
+          ls -l osx-arm64 || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osx-64
+          path: osx-64/
 
   Build-Conda-Channel-Push-to-GithubPages:
 
@@ -165,7 +237,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    needs: [Build-and-Deploy-Linux, Build-and-Deploy-Windows]
+    needs: [Build-and-Deploy-Linux, Build-and-Deploy-Windows, Build-and-Deploy-macOS]
 
     defaults:
       run:
@@ -205,6 +277,12 @@ jobs:
         with:
           name: win-64
           path: win-64
+
+      - name: Download MacOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: osx-64
+          path: osx-64
 
       - name: Conda index
         run: |
