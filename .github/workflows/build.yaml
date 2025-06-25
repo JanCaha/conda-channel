@@ -200,7 +200,7 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
           cd cpp-viewshed-library
-          conda build conda
+          conda build conda --variant-config-files conda/variants/macOS.yaml
           conda install --use-local libviewshed
           cd ..
           rm -rf cpp-viewshed-library
