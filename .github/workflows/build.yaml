@@ -48,8 +48,6 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
-          # TODO temporary fix to avoid clashes between newer GDAL 3.11 and Qt6
-          sed -i 's/^\([[:space:]]*\)- libgdal/\1- libgdal=3.10/g' conda/meta.yaml
           conda build conda --variant-config-files conda/variants/unix.yaml
           conda install --use-local libsimplerasters
           cd ..
