@@ -40,10 +40,6 @@ jobs:
           python-version: ${{ env.python-version }}
           activate-environment: true
 
-      - name: Pin GDAL to avoid clashes with QT
-        run: |
-          conda config --add pinned_packages libgdal=3.10
-
       - name: Install conda-build
         run: |
           conda install -n base conda-build conda-verify conda-index sqlite
@@ -52,6 +48,8 @@ jobs:
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
+          # TODO temporary fix to avoid clashes between newer GDAL 3.11 and Qt6
+          sed -i 's/^\([[:space:]]*\)- libgdal/\1- libgdal=3.10/g' conda/meta.yaml
           conda build conda --variant-config-files conda/variants/unix.yaml
           conda install --use-local libsimplerasters
           cd ..
