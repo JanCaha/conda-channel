@@ -4,19 +4,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-on: 
+on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 1 * *'  # Run at 00:00 UTC on the 1st day of every month
+    - cron: "0 0 1 * *" # Run at 00:00 UTC on the 1st day of every month
 
 env:
   python-version: 3.13
 
 jobs:
-
   Build-and-Deploy-Linux:
-
     name: Build and deploy Linux packages
 
     runs-on: ubuntu-latest
@@ -41,7 +39,11 @@ jobs:
           auto-activate-base: true
           python-version: ${{ env.python-version }}
           activate-environment: true
-      
+
+      - name: Pin GDAL to avoid clashes with QT
+        run: |
+          conda config --add pinned_packages libgdal=3.10
+
       - name: Install conda-build
         run: |
           conda install -n base conda-build conda-verify conda-index sqlite
@@ -54,7 +56,7 @@ jobs:
           conda install --use-local libsimplerasters
           cd ..
           rm -rf cpp-simplerasters
-      
+
       - name: Clone and build libviewshed
         run: |
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
@@ -63,7 +65,7 @@ jobs:
           conda install --use-local libviewshed
           cd ..
           rm -rf cpp-viewshed-library
-      
+
       - name: Clone and build viewshed
         run: |
           gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
@@ -80,20 +82,18 @@ jobs:
 
       - name: List packages
         run: |
-          ls -l linux-64   
+          ls -l linux-64
 
       - uses: actions/upload-artifact@v4
         with:
           name: linux-64
           path: linux-64/
 
-  
   Build-and-Deploy-Windows:
-
     name: Build and deploy Windows packages
-    
+
     runs-on: windows-latest
-    
+
     defaults:
       run:
         shell: cmd
@@ -103,7 +103,6 @@ jobs:
       LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
 
     steps:
-
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
@@ -112,7 +111,7 @@ jobs:
           auto-activate-base: true
           python-version: ${{ env.python-version }}
           activate-environment: true
-      
+
       - name: Install conda-build
         run: |
           conda install -n base conda-build conda-verify
@@ -136,7 +135,7 @@ jobs:
           conda install --use-local libviewshed
           cd ..
           rmdir /s /q cpp-viewshed-library
-      
+
       - name: Clone and build viewshed
         shell: cmd
         run: |
@@ -146,7 +145,7 @@ jobs:
           conda install --use-local viewshed
           cd ..
           rmdir /s /q viewshed-library-pybind11
-      
+
       - name: Copy to directory
         run: |
           mkdir win-64
@@ -160,9 +159,8 @@ jobs:
         with:
           name: win-64
           path: win-64/
-  
-  Build-and-Deploy-macOS:
 
+  Build-and-Deploy-macOS:
     name: Build and deploy macOS packages
 
     runs-on: macos-latest
@@ -223,7 +221,7 @@ jobs:
 
       - name: List packages
         run: |
-          ls -l osx-arm64 
+          ls -l osx-arm64
 
       - uses: actions/upload-artifact@v4
         with:
@@ -231,22 +229,21 @@ jobs:
           path: osx-arm64/
 
   Build-Conda-Channel-Push-to-GithubPages:
-
     name: Build Conda Channel and push to GitHub Pages
 
     runs-on: ubuntu-latest
 
-    needs: [Build-and-Deploy-Linux, Build-and-Deploy-Windows, Build-and-Deploy-macOS]
+    needs:
+      [Build-and-Deploy-Linux, Build-and-Deploy-Windows, Build-and-Deploy-macOS]
 
     defaults:
       run:
         shell: bash -l {0}
-    
+
     permissions:
       contents: write
 
     steps:
-
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -258,7 +255,7 @@ jobs:
 
       - name: Install conda-build
         run: |
-          conda install -n base conda-build conda-index  
+          conda install -n base conda-build conda-index
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -289,5 +286,5 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-            commit_message: New package versions
-            branch: gh-pages
+          commit_message: New package versions
+          branch: gh-pages
