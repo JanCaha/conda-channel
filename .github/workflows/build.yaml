@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Setup conda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           use-mamba: true
@@ -45,6 +45,7 @@ jobs:
           conda install -n base conda-build conda-verify conda-index sqlite
 
       - name: Clone and build libsimplerasters
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
@@ -54,6 +55,7 @@ jobs:
           rm -rf cpp-simplerasters
 
       - name: Clone and build libviewshed
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
           cd cpp-viewshed-library
@@ -63,6 +65,7 @@ jobs:
           rm -rf cpp-viewshed-library
 
       - name: Clone and build viewshed
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
           cd viewshed-library-pybind11
@@ -72,15 +75,19 @@ jobs:
           rm -rf viewshed-library-pybind11
 
       - name: Copy to directory
+        if: ${{ always() }}
         run: |
           mkdir -p linux-64
-          cp $CONDA/conda-bld/linux-64/*.conda linux-64
+          echo "No Linux packages built in this run." > linux-64/no-packages.txt
+          cp $CONDA/conda-bld/linux-64/*.conda linux-64 || true
 
       - name: List packages
+        if: ${{ always() }}
         run: |
           ls -l linux-64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
+        if: ${{ always() }}
         with:
           name: linux-64
           path: linux-64/
@@ -99,7 +106,7 @@ jobs:
       LIBARCHIVE: C:\Miniconda\Library\bin\archive.dll
 
     steps:
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           use-mamba: true
@@ -113,6 +120,7 @@ jobs:
           conda install -n base conda-build conda-verify
 
       - name: Clone and build libsimplerasters
+        continue-on-error: true
         shell: cmd
         run: |
           gh repo clone JanCaha/cpp-simplerasters
@@ -123,6 +131,7 @@ jobs:
           rmdir /s /q cpp-simplerasters
 
       - name: Clone and build libviewshed
+        continue-on-error: true
         shell: cmd
         run: |
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
@@ -133,6 +142,7 @@ jobs:
           rmdir /s /q cpp-viewshed-library
 
       - name: Clone and build viewshed
+        continue-on-error: true
         shell: cmd
         run: |
           gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
@@ -143,15 +153,19 @@ jobs:
           rmdir /s /q viewshed-library-pybind11
 
       - name: Copy to directory
+        if: ${{ always() }}
         run: |
           mkdir win-64
-          copy %CONDA%\conda-bld\win-64\*.conda win-64
+          echo No Windows packages built in this run. > win-64\no-packages.txt
+          copy %CONDA%\conda-bld\win-64\*.conda win-64 || ver > nul
 
       - name: List packages
+        if: ${{ always() }}
         run: |
           dir win-64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
+        if: ${{ always() }}
         with:
           name: win-64
           path: win-64/
@@ -170,7 +184,7 @@ jobs:
 
     steps:
       - name: Setup conda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           use-mamba: true
@@ -184,6 +198,7 @@ jobs:
           conda install -n base conda-build conda-verify conda-index sqlite
 
       - name: Clone and build libsimplerasters
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/cpp-simplerasters
           cd cpp-simplerasters
@@ -193,6 +208,7 @@ jobs:
           rm -rf cpp-simplerasters
 
       - name: Clone and build libviewshed
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/cpp-viewshed-library -- --recurse-submodules
           cd cpp-viewshed-library
@@ -202,6 +218,7 @@ jobs:
           rm -rf cpp-viewshed-library
 
       - name: Clone and build viewshed
+        continue-on-error: true
         run: |
           gh repo clone JanCaha/viewshed-library-pybind11 -- --recurse-submodules
           cd viewshed-library-pybind11
@@ -211,15 +228,19 @@ jobs:
           rm -rf viewshed-library-pybind11
 
       - name: Copy to directory
+        if: ${{ always() }}
         run: |
           mkdir -p osx-arm64
-          cp $CONDA/conda-bld/osx-arm64/*.conda osx-arm64
+          echo "No macOS packages built in this run." > osx-arm64/no-packages.txt
+          cp $CONDA/conda-bld/osx-arm64/*.conda osx-arm64 || true
 
       - name: List packages
+        if: ${{ always() }}
         run: |
           ls -l osx-arm64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
+        if: ${{ always() }}
         with:
           name: osx-arm64
           path: osx-arm64/
@@ -241,7 +262,7 @@ jobs:
 
     steps:
       - name: Setup conda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           use-mamba: true
@@ -254,24 +275,24 @@ jobs:
           conda install -n base conda-build conda-index
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: gh-pages
 
       - name: Download Linux artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: linux-64
           path: linux-64
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: win-64
           path: win-64
 
       - name: Download MacOS artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: osx-arm64
           path: osx-arm64
@@ -280,7 +301,7 @@ jobs:
         run: |
           conda index .
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: New package versions
           branch: gh-pages
